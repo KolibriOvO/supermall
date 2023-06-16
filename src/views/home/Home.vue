@@ -1,10 +1,12 @@
 <script>
 import NavBar from "@/common/navbar/NavBar.vue";
 import {getHomeMultidata} from "@/network/home";
+import HomeSwiper from "@/views/home/childComps/HomeSwiper.vue";
 
 export default {
   name: 'Home',
   components: {
+    HomeSwiper,
     NavBar
   },
   data() {
@@ -15,8 +17,8 @@ export default {
   },
   created() {
     getHomeMultidata().then(res => {
-      this.banners = res.data.banners.list;
-      this.recommends = res.data.recommends.list
+      this.banners = res.data.banner.list;
+      this.recommends = res.data.recommend.list
     })
   }
 }
@@ -29,6 +31,7 @@ export default {
         <div>购物街</div>
       </template>
     </NavBar>
+    <home-swiper :banners="banners"></home-swiper>
   </div>
 </template>
 
