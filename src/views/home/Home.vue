@@ -6,10 +6,13 @@ import RecommendView from "@/views/home/childComps/RecommendView.vue";
 import FeatureView from "@/views/home/childComps/FeatureView.vue";
 import TabControl from "@/components/content/tabControl/TabControl.vue";
 import GoodList from "@/components/content/goods/GoodsList.vue";
+import BackTop from "@/components/content/backTop/BackTop.vue";
+import backTop from "@/components/content/backTop/BackTop.vue";
 
 export default {
   name: 'Home',
   components: {
+    BackTop,
     GoodList,
     TabControl,
     FeatureView,
@@ -26,7 +29,8 @@ export default {
         'new': {page: 0, list: []},
         'sell': {page: 0, list: []},
       },
-      currentType: 'pop'
+      currentType: 'pop',
+      isShowBackTop: false
     }
   },
   methods: {
@@ -55,6 +59,10 @@ export default {
           this.currentType = 'sell'
           break;
       }
+    },
+    handleScroll() {
+      this.isShowBackTop = window.scrollY > window.innerHeight / 2;
+
     }
   },
   computed: {
@@ -67,6 +75,9 @@ export default {
     this.getHomeGoods('pop')
     this.getHomeGoods('new')
     this.getHomeGoods('sell')
+  },
+  mounted() {
+    window.addEventListener('scroll', this.handleScroll)
   }
 }
 </script>
@@ -78,13 +89,18 @@ export default {
         <div>购物街</div>
       </template>
     </NavBar>
-    <home-swiper :banners="banners"/>
-    <recommend-view :recommends="recommends"/>
-    <FeatureView/>
-    <TabControl :titles="['流行','新款','精选']"
-                class="tab-control"
-                @tabClick="tabClick"/>
-    <GoodList :goods="showGoods"/>
+
+    <div class="content" ref="scroll">
+      <home-swiper :banners="banners"/>
+      <recommend-view :recommends="recommends"/>
+      <FeatureView/>
+      <TabControl :titles="['流行','新款','精选']"
+                  class="tab-control"
+                  @tabClick="tabClick"/>
+      <GoodList :goods="showGoods"/>
+    </div>
+
+    <back-top v-show="isShowBackTop"/>
   </div>
 </template>
 
