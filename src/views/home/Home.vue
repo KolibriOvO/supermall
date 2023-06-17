@@ -25,7 +25,8 @@ export default {
         'pop': {page: 0, list: []},
         'new': {page: 0, list: []},
         'sell': {page: 0, list: []},
-      }
+      },
+      currentType: 'pop'
     }
   },
   methods: {
@@ -42,6 +43,24 @@ export default {
         this.goods[type].page += 1
       })
     },
+    tabClick(index) {
+      switch (index) {
+        case 0:
+          this.currentType = 'pop'
+          break;
+        case 1:
+          this.currentType = 'new'
+          break;
+        case 2:
+          this.currentType = 'sell'
+          break;
+      }
+    }
+  },
+  computed: {
+    showGoods() {
+      return this.goods[this.currentType].list;
+    }
   },
   created() {
     this.getHomeMultidata()
@@ -62,8 +81,10 @@ export default {
     <home-swiper :banners="banners"/>
     <recommend-view :recommends="recommends"/>
     <FeatureView/>
-    <TabControl :titles="['流行','新款','精选']" class="tab-control"/>
-    <GoodList :goods="goods['pop'].list"/>
+    <TabControl :titles="['流行','新款','精选']"
+                class="tab-control"
+                @tabClick="tabClick"/>
+    <GoodList :goods="showGoods"/>
   </div>
 </template>
 
