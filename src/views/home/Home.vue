@@ -7,7 +7,7 @@ import FeatureView from "@/views/home/childComps/FeatureView.vue";
 import TabControl from "@/components/content/tabControl/TabControl.vue";
 import GoodList from "@/components/content/goods/GoodsList.vue";
 import BackTop from "@/components/content/backTop/BackTop.vue";
-import backTop from "@/components/content/backTop/BackTop.vue";
+import dom from "swiper/src/utils/dom";
 
 export default {
   name: 'Home',
@@ -30,7 +30,8 @@ export default {
         'sell': {page: 0, list: []},
       },
       currentType: 'pop',
-      isShowBackTop: false
+      isShowBackTop: false,
+      saveY: 0
     }
   },
   methods: {
@@ -62,8 +63,23 @@ export default {
     },
     handleScroll() {
       this.isShowBackTop = window.scrollY > window.innerHeight / 2;
-
-    }
+    },
+    onScroll() {
+      //可滚动容器的高度
+      let innerHeight = this.$el.clientHeight;
+      //屏幕尺寸高度
+      let outerHeight = document.documentElement.clientHeight;
+      //可滚动容器超出当前窗口显示范围的高度
+      let scrollTop = document.documentElement.scrollTop;
+      //避免切换时读取到异常高度
+      if (scrollTop === 0) {
+        innerHeight = 10000
+      }
+      if (innerHeight <= outerHeight + scrollTop) {
+        //此处添加自定义操作
+        this.getHomeGoods(this.currentType)
+      }
+    },
   },
   computed: {
     showGoods() {
@@ -78,6 +94,15 @@ export default {
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroll)
+    window.addEventListener("scroll", this.onScroll);
+  },
+  activated() {
+    document.documentElement.scrollTop = this.saveY
+    document.body.scrollTop = this.saveY
+  },
+  beforeRouteLeave(to, from, next) {
+    this.saveY = document.documentElement.scrollTop || document.body.scrollTop
+    next()
   }
 }
 </script>
@@ -98,6 +123,10 @@ export default {
                   class="tab-control"
                   @tabClick="tabClick"/>
       <GoodList :goods="showGoods"/>
+      <div class="load-more"
+           ref="load-more">
+        上拉加载更多
+      </div>
     </div>
 
     <back-top v-show="isShowBackTop"/>
@@ -105,6 +134,11 @@ export default {
 </template>
 
 <style scoped>
+#home {
+  padding-top: 44px;
+  padding-bottom: 49px;
+}
+
 .home-nav {
   background-color: var(--color-tint);
   color: #fff;
@@ -119,5 +153,14 @@ export default {
   position: sticky;
   top: 43px;
   z-index: 9;
+}
+
+.load-more {
+  display: block;
+  width: 100%;
+  line-height: 40px;
+  left: 0;
+  right: 0;
+  text-align: center;
 }
 </style>
