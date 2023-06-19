@@ -1,6 +1,9 @@
 <script>
+import DetailNavBar from "@/views/detail/childComps/DetailNavBar.vue";
+
 export default {
   name:'Detail',
+  components: {DetailNavBar},
   data(){
     return{
       iid:null
@@ -14,8 +17,7 @@ export default {
 
 <template>
 <div id="detail">
-  详情页
-  {{iid}}
+  <DetailNavBar/>
 </div>
 </template>
 
