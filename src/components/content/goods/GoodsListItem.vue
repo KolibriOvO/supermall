@@ -9,9 +9,18 @@ export default {
       }
     }
   },
-  methods:{
-    itemClick(){
-      this.$router.push('/detail/'+this.goodsItem.iid)
+  methods: {
+    itemClick() {
+      this.$router.push('/detail/' + this.goodsItem.iid)
+    },
+    imageLoad() {
+      // 用事件总线发送事件
+      this.$bus.$emit('itemImageLoad')
+    },
+  },
+  computed: {
+    showImage() {
+      return this.goodsItem.img || this.goodsItem.image || this.goodsItem.show.img
     }
   }
 }
@@ -19,7 +28,7 @@ export default {
 
 <template>
   <div class="goods-item" @click="itemClick">
-    <img :src="goodsItem.show.img" alt="">
+    <img :src="showImage" alt="" @load="imageLoad">
     <div class="goods-info">
       <p>{{ goodsItem.title }}</p>
       <span class="price">{{ goodsItem.price }}</span>
