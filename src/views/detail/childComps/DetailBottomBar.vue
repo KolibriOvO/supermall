@@ -93,10 +93,4 @@ export default {
 .bar-right .buy {
   background-color: #f69;
 }
-
-.sport-ball {
-  position: absolute;
-  left: 225px;
-  bottom: 20px;
-}
 </style>
