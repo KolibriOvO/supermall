@@ -60,7 +60,7 @@ export default {
           break;
       }
     },
-    handleScroll() {
+    showBackTop() {
       this.isShowBackTop = window.scrollY > window.innerHeight / 2;
     },
     onScroll() {
@@ -92,7 +92,7 @@ export default {
     this.getHomeGoods('sell')
   },
   mounted() {
-    window.addEventListener('scroll', this.handleScroll)
+    window.addEventListener('scroll', this.showBackTop)
     window.addEventListener("scroll", this.onScroll);
   },
   activated() {
@@ -151,7 +151,7 @@ export default {
 .tab-control {
   position: sticky;
   top: 43px;
-  z-index: 9;
+  z-index: 7;
 }
 
 .load-more {
