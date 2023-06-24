@@ -41,7 +41,7 @@ export default {
         <span>{{ commentInfo.style }}</span>
       </div>
       <div class="info-imgs">
-        <img :src="item" v-for="(item, index) in commentInfo.images" :key="index">
+        <img :src="item" v-for="(item, index) in commentInfo.images" :key="index" alt="">
       </div>
     </div>
   </div>
