@@ -7,7 +7,6 @@ import FeatureView from "@/views/home/childComps/FeatureView.vue";
 import TabControl from "@/components/content/tabControl/TabControl.vue";
 import GoodList from "@/components/content/goods/GoodsList.vue";
 import BackTop from "@/components/content/backTop/BackTop.vue";
-import dom from "swiper/src/utils/dom";
 
 export default {
   name: 'Home',
