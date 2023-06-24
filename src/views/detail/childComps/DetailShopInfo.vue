@@ -21,7 +21,7 @@ export default {
 <template>
   <div class="shop-info">
     <div class="shop-top">
-      <img :src="shop.logo">
+      <img :src="shop.logo" alt="">
       <span class="title">{{ shop.name }}</span>
     </div>
     <div class="shop-middle">
