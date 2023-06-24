@@ -9,10 +9,12 @@ import DetailParamInfo from "@/views/detail/childComps/DetailParamInfo.vue";
 import DetailCommentInfo from "@/views/detail/childComps/DetailCommentInfo.vue";
 import GoodList from "@/components/content/goods/GoodsList.vue";
 import BackTop from "@/components/content/backTop/BackTop.vue";
+import DetailBottomBar from "@/views/detail/childComps/DetailBottomBar.vue";
 
 export default {
   name: 'Detail',
   components: {
+    DetailBottomBar,
     BackTop,
     GoodList,
     DetailCommentInfo,
@@ -28,19 +30,44 @@ export default {
       paramInfo: {},
       commentInfo: {},
       recommends: [],
-      themeTopYs:[]
+      themeTopYs: [],
+      getThemeTopYs: null,
+      bodyHeight: 0,
+      isActive: 0,
+      isShowBackTop: false
     }
   },
   methods: {
+    showBackTop() {
+      this.isShowBackTop = window.scrollY > window.innerHeight / 2;
+    },
     imgLoad() {
-      // 给navbar中的item定位到对应的位置
-      this.themeTopYs = []
       this.themeTopYs.push(0);
       this.themeTopYs.push(this.$refs.params.$el.offsetTop);
       this.themeTopYs.push(this.$refs.comment.$el.offsetTop);
       this.themeTopYs.push(this.$refs.recommend.$el.offsetTop);
       this.themeTopYs.push(Number.MAX_VALUE)
     },
+    titleClick(index) {
+      window.scrollTo({
+        top: this.themeTopYs[index],
+        left: 0,
+        behavior: "smooth"
+      })
+    },
+    showTitle() {
+      this.bodyHeight = document.documentElement.scrollTop || document.body.scrollTop
+    },
+    addCart() {
+
+    },
+    buyNow() {
+
+    }
+  },
+  mounted() {
+    window.addEventListener('scroll', this.showBackTop)
+    window.addEventListener('scroll', this.showTitle)
   },
   created() {
     this.iid = this.$route.params.iid
@@ -57,21 +84,48 @@ export default {
     })
     getRecommend().then(res => {
       this.recommends = res.data.list
-    });
+    })
+  },
+  watch: {
+    bodyHeight: {
+      handler(newVal) {
+        if (newVal >= this.themeTopYs[0] && newVal < this.themeTopYs[1]) {
+          this.isActive = 0
+        }
+        if (newVal >= this.themeTopYs[1] && newVal < this.themeTopYs[2]) {
+          this.isActive = 1
+        }
+        if (newVal >= this.themeTopYs[2] && newVal < this.themeTopYs[3]) {
+          this.isActive = 2
+        }
+        if (newVal >= this.themeTopYs[3]) {
+          this.isActive = 3
+        }
+        if (newVal === 0) {
+          this.isActive = 0
+        }
+      },
+      immediate: true,
+      deep: true
+    }
   }
 }
 </script>
 
 <template>
   <div id="detail">
-    <DetailNavBar class="detail-nav"/>
-    <DetailSwiper :top-images="topImages"/>
-    <DetailBaseInfo :goods="goods"/>
-    <DetailShopInfo :shop="shop"/>
-    <DetailGoodsInfo :detail-info="detailInfo" @imgLoad="imgLoad" class="goods-info" ref="goodsInfo"/>
-    <DetailParamInfo :param-info="paramInfo" ref="params"/>
-    <DetailCommentInfo :comment-info="commentInfo" ref="comment"/>
-    <GoodList :goods="recommends" ref="recommend"/>
+    <DetailNavBar class="detail-nav" @titleClick="titleClick" :isActive="isActive"/>
+    <div ref="scroll" class="content">
+      <DetailSwiper :top-images="topImages"/>
+      <DetailBaseInfo :goods="goods"/>
+      <DetailShopInfo :shop="shop"/>
+      <DetailGoodsInfo :detail-info="detailInfo" @imgLoad="imgLoad" class="goods-info" ref="goodsInfo"/>
+      <DetailParamInfo :param-info="paramInfo" ref="params"/>
+      <DetailCommentInfo :comment-info="commentInfo" ref="comment"/>
+      <GoodList :goods="recommends" ref="recommend"/>
+    </div>
+    <DetailBottomBar @addCart="addCart" @buyNow="buyNow"/>
+    <back-top v-show="isShowBackTop"/>
   </div>
 </template>
 
@@ -83,8 +137,18 @@ export default {
 }
 
 .detail-nav {
-  position: relative;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
   z-index: 9;
   background-color: #fff;
+}
+
+.content {
+  height: calc(100% - 100px);
+  overflow: hidden;
+  position: relative;
+  top: 44px;
 }
 </style>
