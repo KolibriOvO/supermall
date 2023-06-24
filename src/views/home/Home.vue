@@ -1,5 +1,5 @@
 <script>
-import NavBar from "@/common/navbar/NavBar.vue";
+import NavBar from "@/components/common/navbar/NavBar.vue";
 import {getHomeGoods, getHomeMultidata} from "@/network/home";
 import HomeSwiper from "@/views/home/childComps/HomeSwiper.vue";
 import RecommendView from "@/views/home/childComps/RecommendView.vue";
