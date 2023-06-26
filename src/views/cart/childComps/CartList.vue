@@ -4,10 +4,10 @@ import {mapGetters} from "vuex";
 
 export default {
   name: 'CartList',
-  components: CartListItem,
+  components: {CartListItem},
   computed: {
     ...mapGetters([
-      'carList'
+      'cartList'
     ])
   }
 }
@@ -16,7 +16,7 @@ export default {
 <template>
   <div class="cart-list">
     <div class="content" ref="scroll">
-      <CartListItem v-for="(item,index) in cartList"
+      <CartListItem v-for="(item,index) in carList"
                     :product="item"
                     :key="index"/>
     </div>
