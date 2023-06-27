@@ -10,7 +10,7 @@ export default {
   computed: {
     ...mapGetters({
       length: 'cartLength',
-      list: 'carList'
+      list: 'cartList'
     })
   }
 }
