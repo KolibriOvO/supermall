@@ -8,7 +8,7 @@ export default {
     CheckButton
   },
   computed: {
-    ...mapGetters(['carList']),
+    ...mapGetters(['cartList']),
     totalPrice() {
       return '￥' + this.cartList.filter(item => {
         return item.checked
@@ -18,6 +18,30 @@ export default {
     },
     checkLength() {
       return this.cartList.filter(item => item.checked).length
+    },
+    isSelectAll() {
+      if (this.cartList.length === 0) {
+        return false
+      }
+      for (let item of this.cartList) {
+        if (!item.checked) {
+          return false
+        }
+      }
+      return true
+    }
+  },
+  methods: {
+    checkClick() {
+      if (this.isSelectAll) {
+        this.cartList.forEach(item => {
+          item.checked = false
+        })
+      } else {
+        this.cartList.forEach(item => {
+          item.checked = true
+        })
+      }
     }
   }
 }
@@ -26,7 +50,9 @@ export default {
 <template>
   <div class="bottom-bar">
     <div class="check-content">
-      <CheckButton class="check-button"/>
+      <CheckButton :is-checked="isSelectAll"
+                   class="check-button"
+                   @click.native="checkClick"/>
       <span>全选</span>
     </div>
     <div class="price">合计 : {{ totalPrice }}</div>
