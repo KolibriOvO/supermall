@@ -10,6 +10,7 @@ import DetailCommentInfo from "@/views/detail/childComps/DetailCommentInfo.vue";
 import GoodList from "@/components/content/goods/GoodsList.vue";
 import BackTop from "@/components/content/backTop/BackTop.vue";
 import DetailBottomBar from "@/views/detail/childComps/DetailBottomBar.vue";
+import {mapActions} from "vuex";
 
 export default {
   name: 'Detail',
@@ -38,6 +39,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['addCart']),
     showBackTop() {
       this.isShowBackTop = window.scrollY > window.innerHeight / 2;
     },
@@ -58,14 +60,16 @@ export default {
     showTitle() {
       this.bodyHeight = document.documentElement.scrollTop || document.body.scrollTop
     },
-    addCart() {
+    addToCart() {
       const product = {}
       product.image = this.topImages[0]
       product.title = this.goods.title
       product.desc = this.goods.desc
       product.price = this.goods.realPrice
       product.iid = this.iid
-      this.$store.dispatch('addCart',product)
+      this.addCart(product).then(res => {
+        console.log(res);
+      })
     },
     buyNow() {
 
@@ -130,7 +134,7 @@ export default {
       <DetailCommentInfo :comment-info="commentInfo" ref="comment"/>
       <GoodList :goods="recommends" ref="recommend"/>
     </div>
-    <DetailBottomBar @addCart="addCart" @buyNow="buyNow"/>
+    <DetailBottomBar @addCart="addToCart" @buyNow="buyNow"/>
     <back-top v-show="isShowBackTop"/>
   </div>
 </template>
