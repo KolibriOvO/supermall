@@ -16,7 +16,7 @@ export default {
 <template>
   <div class="cart-list">
     <div class="content" ref="scroll">
-      <CartListItem v-for="(item,index) in carList"
+      <CartListItem v-for="(item,index) in cartList"
                     :product="item"
                     :key="index"/>
     </div>
