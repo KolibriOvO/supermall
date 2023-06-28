@@ -42,6 +42,11 @@ export default {
           item.checked = true
         })
       }
+    },
+    calcClick() {
+      if (this.checkLength === 0) {
+        this.$toast.show('请选择要购买的商品', 1500)
+      }
     }
   }
 }
@@ -56,7 +61,7 @@ export default {
       <span>全选</span>
     </div>
     <div class="price">合计 : {{ totalPrice }}</div>
-    <div class="calculate">去计算 ( {{ checkLength }} )</div>
+    <div class="calculate" @click="calcClick">付款 ( {{ checkLength }} )</div>
   </div>
 </template>
 
